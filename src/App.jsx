@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+// import reactLogo from './assets/react.svg';
+// import viteLogo from '/vite.svg';
 import './App.css';
 import { Descope, useDescope } from '@descope/react-sdk';
-import { Button,TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import logo from './assets/QSight.png'
+
+const getInitialTheme = () => {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+  return 'light';
+};
+
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
   const [isActive, setActive] = useState(true);
   const descopeSdk = useDescope();
   const sessionToken = descopeSdk.getSessionToken();
@@ -28,7 +36,7 @@ function App() {
   const onLogout = async () => {
     try {
       const resp = await descopeSdk.logout();
-      console.log('Token', loginResp);
+      console.log('Token', resp);
     } catch (error) {
       console.error('Logout failed', error);
     }
@@ -69,7 +77,7 @@ function App() {
         >
           <Descope
             flowId="sign-in"
-            theme="light"
+            theme={getInitialTheme()}
             onSuccess={(e) => {
               setLoginResp(e?.detail.user?.userTenants);
               console.log(e?.detail);
