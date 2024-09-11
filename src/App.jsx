@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg';
 import './App.css';
 import { Descope, useDescope } from '@descope/react-sdk';
 import { Button } from '@mui/material';
-
+import logo from './assets/QSight.png'
 function App() {
   const [count, setCount] = useState(0);
   const [isActive, setActive] = useState(true);
@@ -36,13 +36,35 @@ function App() {
 
   return (
     <div>
+        <header style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '10px 10px 20px',
+      backgroundColor: '#f8f9fa',
+      borderBottom: '1px solid #ddd'
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <img
+          src={logo}
+          alt="App Logo"
+          style={{ height: '40px' }}
+        />
+      </div>
+      {isActive ? <Button onClick={onLogout} variant="contained" color="primary">
+              Logout
+            </Button> : <></>}
+    </header>
       {!isActive ? (
         <div
           style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: 'calc(100vh - 250px)', // Adjusted for viewport height
+            
           }}
         >
           <Descope
@@ -67,7 +89,6 @@ function App() {
               display: 'grid',
               justifyContent: 'space-between',
               marginBottom: '2rem',
-             
               gridTemplateColumns:'auto auto'
 
             }}
@@ -87,7 +108,7 @@ function App() {
                 gap: '1rem',
               }}
             >
-              <div style={{ fontWeight: '500' }}>tenantName -</div>
+              <div style={{ fontWeight: '500' }}>Hospital Name -</div>
               <div>{loginResp[0]?.tenantName}</div>
             </div>
             <div
@@ -97,13 +118,11 @@ function App() {
                 gap: '55px',
               }}
             >
-              <div style={{ fontWeight: '500' }}>tenantId -</div>
+              <div style={{ fontWeight: '500' }}>Hospital Tenant Id -</div>
               <div>{loginResp[0]?.tenantId}</div>
             </div>
           </div>
-            <Button onClick={onLogout} variant="contained" color="primary">
-              Logout
-            </Button>
+            
           </div>
          
         </>
