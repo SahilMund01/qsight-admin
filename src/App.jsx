@@ -110,8 +110,8 @@ function App() {
               }}
             >
               <div style={{ fontWeight: '500', width:'220px' }}>Hospital Name -</div>
-              <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantName} label="" variant="outlined" />
-              {/* <div>{loginResp[0]?.tenantName}</div> */}
+              {/* <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantName} label="" variant="outlined" /> */}
+              <div>{loginResp[0]?.tenantName}</div>
             </div>
             <div
               style={{
@@ -121,8 +121,8 @@ function App() {
               }}
             >
               <div style={{ fontWeight: '500',minWidth:'50px' }}>Hospital Tenant Id -</div>
-              <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantId} label="" variant="outlined" />
-              {/* <div>{}</div> */}
+              {/* <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantId} label="" variant="outlined" /> */}
+              <div>{loginResp[0]?.tenantId}</div>
             </div>
           </div>
             
