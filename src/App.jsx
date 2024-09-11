@@ -61,20 +61,21 @@ function App() {
       ) : (
         <>
           <div
+            
             style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
+              padding:'20px',
+              display: 'grid',
+              justifyContent: 'space-between',
               marginBottom: '2rem',
+             
+              gridTemplateColumns:'auto auto'
+
             }}
           >
-            <Button onClick={onLogout} variant="contained" color="primary">
-              Logout
-            </Button>
-          </div>
-          <div
+              <div
             style={{
               fontSize: '20px',
-              height: 'calc(100vh - 300px)', // Adjusted for viewport height
+              // Adjusted for viewport height
             }}
           >
             {/* <div>tenantName - {loginResp[0]?.tenantName}</div>
@@ -100,6 +101,11 @@ function App() {
               <div>{loginResp[0]?.tenantId}</div>
             </div>
           </div>
+            <Button onClick={onLogout} variant="contained" color="primary">
+              Logout
+            </Button>
+          </div>
+         
         </>
       )}
     </div>
