@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import { Descope, useDescope } from '@descope/react-sdk';
-import { Button } from '@mui/material';
+import { Button,TextField } from '@mui/material';
 import logo from './assets/QSight.png'
 function App() {
   const [count, setCount] = useState(0);
@@ -41,7 +41,7 @@ function App() {
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: '10px 10px 20px',
-      backgroundColor: '#f8f9fa',
+      // backgroundColor: '#f8f9fa',
       borderBottom: '1px solid #ddd'
     }}>
       <div style={{
@@ -106,10 +106,12 @@ function App() {
                 display: 'flex',
                 justifyContent: 'flex-start',
                 gap: '1rem',
+                marginBottom:'20px'
               }}
             >
-              <div style={{ fontWeight: '500' }}>Hospital Name -</div>
-              <div>{loginResp[0]?.tenantName}</div>
+              <div style={{ fontWeight: '500', width:'220px' }}>Hospital Name -</div>
+              <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantName} label="" variant="outlined" />
+              {/* <div>{loginResp[0]?.tenantName}</div> */}
             </div>
             <div
               style={{
@@ -118,8 +120,9 @@ function App() {
                 gap: '55px',
               }}
             >
-              <div style={{ fontWeight: '500' }}>Hospital Tenant Id -</div>
-              <div>{loginResp[0]?.tenantId}</div>
+              <div style={{ fontWeight: '500',minWidth:'50px' }}>Hospital Tenant Id -</div>
+              <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantId} label="" variant="outlined" />
+              {/* <div>{}</div> */}
             </div>
           </div>
             
