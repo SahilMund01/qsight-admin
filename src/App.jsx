@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react';
 // import viteLogo from '/vite.svg';
 import './App.css';
 import { Descope, useDescope } from '@descope/react-sdk';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import logo from './assets/QSight.png'
+import Hospital from './hospital';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const getInitialTheme = () => {
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -48,8 +50,8 @@ function App() {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '10px 10px 20px',
-      // backgroundColor: '#f8f9fa',
+      padding: '20px 20px',
+      backgroundColor: '',
       borderBottom: '1px solid #ddd'
     }}>
       <div style={{
@@ -59,12 +61,19 @@ function App() {
         <img
           src={logo}
           alt="App Logo"
-          style={{ height: '40px' }}
+          style={{ height: '50px' }}
         />
       </div>
-      {isActive ? <Button onClick={onLogout} variant="contained" color="primary">
-              Logout
-            </Button> : <></>}
+      {isActive ? 
+      <IconButton
+      onClick={onLogout}
+      edge="end"
+      color="inherit"
+      aria-label="edit"
+    >
+      <ExitToAppIcon fontSize='large'  />
+    </IconButton>
+       : <></>}
     </header>
       {!isActive ? (
         <div
@@ -90,7 +99,7 @@ function App() {
         </div>
       ) : (
         <>
-          <div
+          {/* <div
             
             style={{
               padding:'20px',
@@ -104,11 +113,10 @@ function App() {
               <div
             style={{
               fontSize: '20px',
-              // Adjusted for viewport height
+              
             }}
           >
-            {/* <div>tenantName - {loginResp[0]?.tenantName}</div>
-            <div>tenantId - {loginResp[0]?.tenantId}</div> */}
+            
             <div
               style={{
                 display: 'flex',
@@ -118,8 +126,7 @@ function App() {
               }}
             >
               <div style={{ fontWeight: '500', width:'220px' }}>Hospital Name -</div>
-              {/* <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantName} label="" variant="outlined" /> */}
-              <div>{loginResp[0]?.tenantName}</div>
+               <div>{loginResp[0]?.tenantName}</div>
             </div>
             <div
               style={{
@@ -129,13 +136,12 @@ function App() {
               }}
             >
               <div style={{ fontWeight: '500',minWidth:'50px' }}>Hospital Tenant Id -</div>
-              {/* <TextField sx={{width:'500px'}} id="outlined-basic" value={loginResp[0]?.tenantId} label="" variant="outlined" /> */}
-              <div>{loginResp[0]?.tenantId}</div>
+               <div>{loginResp[0]?.tenantId}</div>
             </div>
           </div>
             
-          </div>
-         
+          </div> */}
+         <Hospital/>
         </>
       )}
     </div>
