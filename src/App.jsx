@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // import viteLogo from '/vite.svg';
 import './App.css';
 import { Descope, useDescope } from '@descope/react-sdk';
-import { Button } from '@mui/material'
+import { Button } from '@mui/material';
 import logo from './assets/QSight.png'
 
 const getInitialTheme = () => {
