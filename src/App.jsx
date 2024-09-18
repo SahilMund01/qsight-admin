@@ -6,7 +6,14 @@ import { Descope, useDescope } from '@descope/react-sdk';
 import { IconButton } from '@mui/material';
 import logo from './assets/QSight.png'
 import Hospital from './hospital';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+// import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
 
 const getInitialTheme = () => {
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -43,47 +50,43 @@ function App() {
       console.error('Logout failed', error);
     }
   };
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  // const handleChange = (event) => {
+  //   setAuth(event.target.checked);
+  // };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (val) => {
+    if(val==='logout'){
+      onLogout()
+    }
+    setAnchorEl(null);
+  };
 
   return (
     <div>
-        <header style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '20px 20px',
-      backgroundColor: '',
-      borderBottom: '1px solid #ddd'
-    }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center'
-      }}>
-        <img
-          src={logo}
-          alt="App Logo"
-          style={{ height: '50px' }}
-        />
-      </div>
-      {isActive ? 
-      <IconButton
-      onClick={onLogout}
-      edge="end"
-      color="inherit"
-      aria-label="edit"
-    >
-      <ExitToAppIcon fontSize='large'  />
-    </IconButton>
-       : <></>}
-    </header>
+        
       {!isActive ? (
         <div
           style={{
-            display: 'flex',
+            display: 'grid',
             justifyContent: 'center',
             alignItems: 'center',
+            gridTemplateColumns:"50% 50%"
             
           }}
         >
+          <div style={{ display:'flex', justifyContent:'center', background:'#3852',height:'100dvh', alignItems:'center'}}>
+          <img
+          src={logo}
+          alt="App Logo"
+          style={{width:'50%'}}
+        />
+          </div>
           <Descope
             flowId="sign-in"
             theme={getInitialTheme()}
@@ -141,6 +144,80 @@ function App() {
           </div>
             
           </div> */}
+          {/* <header style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '20px 20px',
+      backgroundColor: '#3852',
+      borderBottom: '1px solid #ddd'
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <img
+          src={logo}
+          alt="App Logo"
+          style={{ height: '50px' }}
+        />
+      </div>
+      
+      <IconButton
+      onClick={onLogout}
+      edge="end"
+      color="inherit"
+      aria-label="edit"
+    >
+      <ExitToAppIcon fontSize='large'  />
+    </IconButton>
+    </header> */}
+    <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            News
+          </Typography>
+          <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={()=>{handleClose('profile')}}>Profile</MenuItem>
+                <MenuItem onClick={()=>{handleClose('logout')}}>Logout</MenuItem>
+              </Menu>
+            </div>
+        </Toolbar>
+      </AppBar>
          <Hospital/>
         </>
       )}

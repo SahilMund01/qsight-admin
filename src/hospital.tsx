@@ -9,19 +9,17 @@ import EditIcon from '@mui/icons-material/Edit';
 // Array of hospital objects
 const initialHospitals = [
   {
-    name: 'City Hospital',
+    hospitalName: 'City Hospital',
     adminEmail: 'admin@cityhospital.com',
-    description: 'A major hospital offering comprehensive healthcare services.',
-    address: '123 Main St, Springfield, IL, 62701',
+    hospitalDesc: 'A major hospital offering comprehensive healthcare services.',
     adminName: 'John Doe',
     status: 'pending',
     tenantId: 'T123'
   },
   {
-    name: 'Greenwood Medical',
+    hospitalName: 'Greenwood Medical',
     adminEmail: 'contact@greenwoodmc.com',
-    description: 'Specializes in orthopedic and emergency care.',
-    address: '456 Elm St, Springfield, IL, 62702',
+    hospitalDesc: 'Specializes in orthopedic and emergency care.',
     adminName: 'Jane Smith',
     status: 'active',
     tenantId: 'T456'
@@ -49,20 +47,61 @@ const Hospital = () => {
   const fetchHospitals = async () => {
     setLoading(true);
     try {
-      const response = await fetch('https://api.example.com/hospitals');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setHospitals(data);
+      fetch('https://1b11-139-167-129-22.ngrok-free.app/api/Tenant/all-tenants', {
+        method: "get",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      })
+        .then((response) => response.json()
+      )
+        .then((data) => setHospitals(data))
+        .catch((err) => console.log(err));
+      // const response = await fetch('https://1b11-139-167-129-22.ngrok-free.app/api/Tenant/all-tenants');
+      // if (!response.ok) {
+      //   throw new Error(`Network response was not ok: ${response.statusText}`);
+      // }
+      // console.log('res',response)
+      // setHospitals(data);
     } catch (error) {
-      console.log('error', error);
-      setHospitals(initialHospitals);
-      setLoading(false);
+      
+      // setHospitals(initialHospitals); // Reset to initial state on error
     } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading state is reset
     }
   };
+
+  const createHospitals = async (selectedHospital) => {
+    setLoading(true);
+    try {
+      const response = await fetch('https://1b11-139-167-129-22.ngrok-free.app/api/Tenant/create-new-tenant', {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "69420",
+        }),
+        body: JSON.stringify(selectedHospital), // Pass the payload here
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+       setSnackbarMessage('Hospital onboarded successfully!');
+       setSnackbarSeverity('success');
+       setSnackbarOpen(true);
+       handleClose()
+       fetchHospitals()
+      // setHospitals(data);
+    } catch (error) {
+      console.log(error);
+      // setHospitals(initialHospitals); // Uncomment if you want to reset on error
+    } finally {
+      setLoading(false); // Ensure loading state is reset
+    }
+  };
+  
 
   const handleOpen = (hospital = null, isNew = false) => {
     setSelectedHospital(hospital);
@@ -93,8 +132,14 @@ const Hospital = () => {
   };
 
   const validateFields = () => {
-    return selectedHospital?.name && selectedHospital?.description && selectedHospital?.address && selectedHospital?.adminName && selectedHospital?.adminEmail && selectedHospital?.tenantId;
-  };
+    if(isNew) {
+      return selectedHospital?.hospitalName && selectedHospital?.hospitalDesc  && selectedHospital?.adminName && selectedHospital?.adminEmail
+  
+    }
+    else {
+      return selectedHospital?.hospitalName && selectedHospital?.hospitalDesc  && selectedHospital?.adminName && selectedHospital?.adminEmail && selectedHospital?.tenantId;
+  
+    } };
 
   const handleSave = () => {
     if (!validateFields()) {
@@ -106,30 +151,31 @@ const Hospital = () => {
 
     setLoading(true); // Start loading
 
-    setTimeout(() => { // Simulate a save operation
+   
       try {
         if (isNew) {
-          setHospitals([...hospitals, {...selectedHospital, status: 'pending'}]);
-          setSnackbarMessage('Hospital onboarded successfully!');
-          setSnackbarSeverity('success');
+          createHospitals(selectedHospital)
+          // setHospitals([...hospitals, {...selectedHospital, status: 'pending'}]);
+          // setSnackbarMessage('Hospital onboarded successfully!');
+          // setSnackbarSeverity('success');
         } else {
           const updatedHospitals = hospitals.map(hospital =>
-            hospital.name === initialValues.name ? selectedHospital : hospital
+            hospital.hospitalName === initialValues.hospitalName ? selectedHospital : hospital
           );
           setHospitals(updatedHospitals);
         }
 
         
-        setSnackbarOpen(true);
+        // setSnackbarOpen(true);
       } catch (error) {
-        setSnackbarMessage('An error occurred while saving.');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
+        // setSnackbarMessage('An error occurred while saving.');
+        // setSnackbarSeverity('error');
+        // setSnackbarOpen(true);
       } finally {
-        setLoading(false); // Stop loading
-        handleClose();
+        // setLoading(false); // Stop loading
+        // handleClose();
       }
-    }, 2000); // Simulate a delay (e.g., 2 seconds)
+    
   };
 
   const handleDiscard = () => {
@@ -145,7 +191,7 @@ const Hospital = () => {
     <div style={{ padding: '10px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography variant="h4" sx={{ margin: '20px 5px' }}>Hospitals</Typography>
-        <Button variant="contained" onClick={() => handleOpen(null, true)}>Add New</Button>
+        <Button  sx={{background:''}} variant="contained" onClick={() => handleOpen(null, true)}>Add New</Button>
       </div>
       {hospitals.length ? (
         <div style={{ width: '100%' }}>
@@ -166,7 +212,7 @@ const Hospital = () => {
                 marginBottom: '20px'
               }}
             >
-              <h3>{hospital.name}</h3>
+              <h3>{hospital.hospitalName}</h3>
               <div style={{
                 display: 'flex',
                 justifyContent: "space-between",
@@ -227,18 +273,18 @@ const Hospital = () => {
         </DialogTitle>
         <DialogContent>
           <TextField
-            label="Name"
-            name="name"
-            value={selectedHospital?.name || ''}
+            label="hospital Name"
+            name="hospitalName"
+            value={selectedHospital?.hospitalName || ''}
             onChange={handleChange}
             disabled={!editMode}
             fullWidth
             margin="normal"
           />
           <TextField
-            label="Description"
-            name="description"
-            value={selectedHospital?.description || ''}
+            label="Hospital Description"
+            name="hospitalDesc"
+            value={selectedHospital?.hospitalDesc || ''}
             onChange={handleChange}
             disabled={!editMode}
             fullWidth
@@ -246,7 +292,7 @@ const Hospital = () => {
             minRows={2}
             margin="normal"
           />
-          <TextField
+          {/* <TextField
             label="Address"
             name="address"
             value={selectedHospital?.address || ''}
@@ -254,7 +300,7 @@ const Hospital = () => {
             disabled={!editMode}
             fullWidth
             margin="normal"
-          />
+          /> */}
           <TextField
             label="Admin Name"
             name="adminName"
@@ -273,7 +319,7 @@ const Hospital = () => {
             fullWidth
             margin="normal"
           />
-          <TextField
+         {!isNew &&  <TextField
             label="Tenant ID"
             name="tenantId"
             value={selectedHospital?.tenantId || ''}
@@ -281,7 +327,7 @@ const Hospital = () => {
             disabled={!editMode}
             fullWidth
             margin="normal"
-          />
+          />}
         </DialogContent>
         <DialogActions sx={{ marginRight: '15px', marginBottom: '20px' }}>
           {editMode && (
