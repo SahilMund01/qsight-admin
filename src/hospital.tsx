@@ -219,7 +219,7 @@ const Hospital = () => {
                 gap: '20px',
                 alignItems: 'center',
               }}>
-                <div style={{ width: '200px' }}><strong>Status:</strong> {hospital.status}</div>
+                <div style={{ minWidth: '200px' }}><strong>Status:</strong> <span style={{color:'green'}}>{hospital?.status ? hospital?.status:'Onboarded'}</span></div>
                 <button
                   style={{
                     backgroundColor: 'green',
