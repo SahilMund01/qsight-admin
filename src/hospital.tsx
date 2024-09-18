@@ -47,7 +47,7 @@ const Hospital = () => {
   const fetchHospitals = async () => {
     setLoading(true);
     try {
-      fetch('http://34.69.17.36/api/Tenant/all-tenants', {
+      fetch('https://1b11-139-167-129-22.ngrok-free.app/api/Tenant/all-tenants', {
         method: "get",
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
@@ -57,7 +57,7 @@ const Hospital = () => {
       )
         .then((data) => setHospitals(data))
         .catch((err) => console.log(err));
-      // const response = await fetch('http://34.69.17.36/api/Tenant/all-tenants');
+      // const response = await fetch('https://1b11-139-167-129-22.ngrok-free.app/api/Tenant/all-tenants');
       // if (!response.ok) {
       //   throw new Error(`Network response was not ok: ${response.statusText}`);
       // }
@@ -74,7 +74,7 @@ const Hospital = () => {
   const createHospitals = async (selectedHospital) => {
     setLoading(true);
     try {
-      const response = await fetch('http://34.69.17.36/api/Tenant/create-new-tenant', {
+      const response = await fetch('https://1b11-139-167-129-22.ngrok-free.app/api/Tenant/create-new-tenant', {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json",
