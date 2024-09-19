@@ -58,6 +58,7 @@ function App() {
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
+    console.log(event.currentTarget);
   };
 
   const handleClose = (val) => {
