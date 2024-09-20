@@ -2,7 +2,7 @@ import { AccountCircle , Menu as MenuIcon} from '@mui/icons-material'
 import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
 import React from 'react'
 
-const Header = ({handleClose, handleMenu, anchorEl}) => {
+const Header = ({handleClose, handleMenu, anchorEl, userRole}) => {
   return (
     <AppBar position="static">
         <Toolbar>
@@ -18,6 +18,14 @@ const Header = ({handleClose, handleMenu, anchorEl}) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Qsight
           </Typography>
+          <div>
+            {
+              userRole &&   <Typography variant="h6" sx={{ flexGrow: 1, marginRight: '20px'}}>
+              <span className='font-semibold'>({userRole})</span>
+           </Typography>
+            }
+        
+          </div>
           <div>
               <IconButton
                 size="large"

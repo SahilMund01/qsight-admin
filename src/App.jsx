@@ -3,18 +3,12 @@ import { useState, useEffect } from 'react';
 // import viteLogo from '/vite.svg';
 import './App.css';
 import { Descope, useDescope } from '@descope/react-sdk';
-import { IconButton } from '@mui/material';
 import logo from './assets/QSight.png'
 import Hospital from './hospital';
-// import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import Header from './Header';
+import { fetchAndProcessAdminData, fetchAndProcessUserData } from './api';
+import Admin from './Admin';
+import User from './User';
 
 const getInitialTheme = () => {
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -29,9 +23,19 @@ function App() {
   const descopeSdk = useDescope();
   const sessionToken = descopeSdk.getSessionToken();
   const [loginResp, setLoginResp] = useState([]);
+  const [data, setData] = useState({
+    user: null,
+    admin: null
+  });
+  const [user, setUser] = useState({
+    email: "",
+    role : ""
+  });
+
 
   useEffect(() => {
     console.log('resss', loginResp);
+
     if (sessionToken) {
       if (descopeSdk?.isJwtExpired(sessionToken)) {
         setActive(false);
@@ -42,6 +46,35 @@ function App() {
       setActive(false);
     }
   }, [sessionToken]);
+
+  useEffect(() => {
+
+    const userData = JSON.parse(localStorage.getItem('user-data'));
+    setUser((prev) => {
+      return {
+        ...prev,
+        role: userData?.role,
+        email : userData?.email
+      }
+     })
+    fetchData();
+
+
+  }, [])
+
+
+  const fetchData = async () => {
+    const adminData = await fetchAndProcessAdminData();
+    // const adminData = await fetchAndProcessUserData();
+    console.log('admin',adminData)
+    setData((prev) => {
+      return {
+        ...prev,
+        admin: adminData
+      }
+    });
+  }
+
 
   const onLogout = async () => {
     try {
@@ -84,6 +117,18 @@ function App() {
            setLoginResp(e?.detail.user?.userTenants);
            console.log(e?.detail);
            console.log(e?.detail?.user?.email);
+           localStorage.setItem('user-data', JSON.stringify({
+            role: "admin",
+            email : e?.detail?.user?.name
+           }))
+           setUser((prev) => {
+            return {
+              ...prev,
+              role: "admin",
+              email : e?.detail?.user?.name
+            }
+           })
+           fetchData();
          }}
          onError={(err) => {
            console.log('Error!', err);
@@ -163,9 +208,17 @@ function App() {
       <ExitToAppIcon fontSize='large'  />
     </IconButton>
     </header> */}
-        <Header handleClose={handleClose} handleMenu={handleMenu} anchorEl={anchorEl}/>
+        <Header handleClose={handleClose} handleMenu={handleMenu} anchorEl={anchorEl} userRole={user.role}/>
 
-        <Hospital/>
+        {/* <Hospital/> */}
+        {
+          user?.role === "admin" && data?.admin && <Admin data={data?.admin} email={user.email}/> 
+        }
+
+        {
+          user?.role === 'user' &&  data?.user && <User data={data?.user} email={user.email}/>
+        }
+       
         </>
       )}
     </div>
