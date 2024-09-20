@@ -14,6 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import Header from './Header';
 
 const getInitialTheme = () => {
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -70,37 +71,26 @@ function App() {
 
   return (
     <div>
-        
+ 
       {!isActive ? (
-        <div
-          style={{
-            display: 'grid',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gridTemplateColumns:"50% 50%"
-            
-          }}
-        >
-          <div style={{ display:'flex', justifyContent:'center', background:'#3852',height:'100dvh', alignItems:'center'}}>
-          <img
-          src={logo}
-          alt="App Logo"
-          style={{width:'50%'}}
-        />
-          </div>
-          <Descope
-            flowId="sign-in"
-            theme={getInitialTheme()}
-            onSuccess={(e) => {
-              setLoginResp(e?.detail.user?.userTenants);
-              console.log(e?.detail);
-              console.log(e?.detail?.user?.email);
-            }}
-            onError={(err) => {
-              console.log('Error!', err);
-            }}
-          />
-        </div>
+       <div className="grid justify-center items-center grid-cols-2">
+       <div className="flex justify-center bg-[#3852] h-screen items-center">
+         <img src={logo} alt="App Logo" className="w-1/2" />
+       </div>
+       <Descope
+         flowId="sign-in"
+         theme={getInitialTheme()}
+         onSuccess={(e) => {
+           setLoginResp(e?.detail.user?.userTenants);
+           console.log(e?.detail);
+           console.log(e?.detail?.user?.email);
+         }}
+         onError={(err) => {
+           console.log('Error!', err);
+         }}
+       />
+     </div>
+     
       ) : (
         <>
           {/* <div
@@ -173,53 +163,9 @@ function App() {
       <ExitToAppIcon fontSize='large'  />
     </IconButton>
     </header> */}
-    <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Qsight
-          </Typography>
-          <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={()=>{handleClose('profile')}}>Profile</MenuItem>
-                <MenuItem onClick={()=>{handleClose('logout')}}>Logout</MenuItem>
-              </Menu>
-            </div>
-        </Toolbar>
-      </AppBar>
-         <Hospital/>
+        <Header handleClose={handleClose} handleMenu={handleMenu} anchorEl={anchorEl}/>
+
+        <Hospital/>
         </>
       )}
     </div>
