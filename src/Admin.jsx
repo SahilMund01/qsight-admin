@@ -115,9 +115,9 @@ const Admin = ({ data, email }) => {
                     Hospitals ({data.length})
                 </Typography>
 
-                <Button variant="contained" disableElevation>
+                {/* <Button variant="contained" disableElevation>
                     Add New
-                </Button>
+                </Button> */}
             </div>
 
 

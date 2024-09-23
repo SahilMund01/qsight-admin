@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
-// import reactLogo from './assets/react.svg';
-// import viteLogo from '/vite.svg';
 import './App.css';
 import { Descope, useDescope } from '@descope/react-sdk';
 import logo from './assets/QSight.png'
-import Hospital from './hospital';
 import Header from './Header';
-import { fetchAndProcessAdminData, fetchAndProcessUserData } from './api';
+import { fetchAndProcessAdminData } from './api';
 import Admin from './Admin';
-import User from './User';
 
 const getInitialTheme = () => {
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -65,8 +61,6 @@ function App() {
 
   const fetchData = async () => {
     const adminData = await fetchAndProcessAdminData();
-    // const adminData = await fetchAndProcessUserData();
-    console.log('admin',adminData)
     setData((prev) => {
       return {
         ...prev,
@@ -79,6 +73,7 @@ function App() {
   const onLogout = async () => {
     try {
       const resp = await descopeSdk.logout();
+      localStorage.clear();
       console.log('Token', resp);
     } catch (error) {
       console.error('Logout failed', error);
@@ -138,85 +133,11 @@ function App() {
      
       ) : (
         <>
-          {/* <div
-            
-            style={{
-              padding:'20px',
-              display: 'grid',
-              justifyContent: 'space-between',
-              marginBottom: '2rem',
-              gridTemplateColumns:'auto auto'
-
-            }}
-          >
-              <div
-            style={{
-              fontSize: '20px',
-              
-            }}
-          >
-            
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-                gap: '1rem',
-                marginBottom:'20px'
-              }}
-            >
-              <div style={{ fontWeight: '500', width:'220px' }}>Hospital Name -</div>
-               <div>{loginResp[0]?.tenantName}</div>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-                gap: '55px',
-              }}
-            >
-              <div style={{ fontWeight: '500',minWidth:'50px' }}>Hospital Tenant Id -</div>
-               <div>{loginResp[0]?.tenantId}</div>
-            </div>
-          </div>
-            
-          </div> */}
-          {/* <header style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '20px 20px',
-      backgroundColor: '#3852',
-      borderBottom: '1px solid #ddd'
-    }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center'
-      }}>
-        <img
-          src={logo}
-          alt="App Logo"
-          style={{ height: '50px' }}
-        />
-      </div>
-      
-      <IconButton
-      onClick={onLogout}
-      edge="end"
-      color="inherit"
-      aria-label="edit"
-    >
-      <ExitToAppIcon fontSize='large'  />
-    </IconButton>
-    </header> */}
+         
         <Header handleClose={handleClose} handleMenu={handleMenu} anchorEl={anchorEl} userRole={user.role}/>
 
-        {/* <Hospital/> */}
         {
           user?.role === "admin" && data?.admin && <Admin data={data?.admin} email={user.email}/> 
-        }
-
-        {
-          user?.role === 'user' &&  data?.user && <User data={data?.user} email={user.email}/>
         }
        
         </>
