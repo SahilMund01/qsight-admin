@@ -1,4 +1,3 @@
-import axios from 'axios';
 
 const adminData = [
   { hospitalName: "General Hospital" },
