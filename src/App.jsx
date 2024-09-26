@@ -5,6 +5,7 @@ import logo from './assets/QSight.png'
 import Header from './Header';
 import { fetchAndProcessAdminData } from './api';
 import Admin from './Admin';
+import { Typography } from '@mui/material';
 
 const getInitialTheme = () => {
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -27,6 +28,7 @@ function App() {
     email: "",
     role : ""
   });
+  const [isAdmin, setIsAdmin] = useState(false);
 
 
   useEffect(() => {
@@ -94,6 +96,7 @@ function App() {
   const handleClose = (val) => {
     if(val==='logout'){
       onLogout()
+      localStorage.clear();
     }
     setAnchorEl(null);
   };
@@ -124,6 +127,8 @@ function App() {
               email : e?.detail?.user?.name
             }
            })
+           const roleNames = e?.detail.user?.userTenants[0].roleNames;
+           setIsAdmin(roleNames.length == 0 ? false : true)
            fetchData();
          }}
          onError={(err) => {
@@ -137,8 +142,20 @@ function App() {
          
         <Header handleClose={handleClose} handleMenu={handleMenu} anchorEl={anchorEl} userRole={user.role}/>
 
+       {
+        !isAdmin &&  
+        <div className='w-[90%] m-auto mt-6'>
+        <div className="bg-blue-100 border border-blue-300 rounded-md p-4 my-4">
+        <Typography className="text-lg font-bold text-red-700">
+        Access Denied: You need an admin account to proceed with this application.
+        </Typography>
+      </div>
+      </div>
+       }
+
         {
-          user?.role === "admin" && data?.admin && <Admin data={data?.admin} email={user.email} onSetUser = {setUser}/> 
+          isAdmin && user?.role === "admin" && data?.admin 
+          && <Admin data={data?.admin} email={user.email} onSetUser = {setUser} role={isAdmin}/> 
         }
        
         </>

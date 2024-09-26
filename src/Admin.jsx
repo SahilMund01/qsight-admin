@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchAndProcessAdminData } from './api';
 
-const Admin = ({ data, email , onSetUser}) => {
+const Admin = ({ data, email , onSetUser, isAdmin}) => {
 
   // const BASE_URL = "https://9848-139-167-129-22.ngrok-free.app";
   const BASE_URL = "https://dns-ssl.online";
@@ -144,6 +144,7 @@ const Admin = ({ data, email , onSetUser}) => {
     setEditMode(false);
     setOpen(false);
   };
+
 
 
   return (
