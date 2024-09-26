@@ -1,33 +1,41 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Typography, Button, Dialog, DialogTitle, TextField, DialogActions, IconButton, DialogContent, CircularProgress, Snackbar, Alert } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
+import { fetchAndProcessAdminData } from './api';
 
-const Admin = ({ data, email }) => {
+const Admin = ({ data, email , onSetUser}) => {
 
-  const BASE_URL = "https://9848-139-167-129-22.ngrok-free.app";
-
+  // const BASE_URL = "https://9848-139-167-129-22.ngrok-free.app";
+  const BASE_URL = "https://dns-ssl.online";
 
   const [open, setOpen] = useState(false);
-  const [hospitals, setHospitals] = useState(data);
+  const [hospitals, setHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState({});
   const [initialValues, setInitialValues] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const adminData = await fetchAndProcessAdminData();
+    setHospitals(adminData);
+  };
+
   const handleOpen = (hospital = null, isNew = false) => {
-    setSelectedHospital(hospital);
-    setInitialValues(hospital); // Save the initial values
-    setIsNew(isNew); // Identify if it's for adding a new hospital
+    setSelectedHospital(hospital || {});
+    setInitialValues(hospital || {});
+    setIsNew(isNew);
     setOpen(true);
-    setEditMode(isNew); // Set edit mode based on whether it's new or existing
+    setEditMode(isNew);
   };
 
   const handleClose = () => {
@@ -45,13 +53,13 @@ const Admin = ({ data, email }) => {
   const createHospitals = async (selectedHospital) => {
     setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/api/Tenant/create-new-tenant`, {
+      const response = await fetch(`${BASE_URL}/api/tenant/create`, {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json",
           "ngrok-skip-browser-warning": "69420",
         }),
-        body: JSON.stringify(selectedHospital), // Pass the payload here
+        body: JSON.stringify(selectedHospital),
       });
 
       if (!response.ok) {
@@ -62,39 +70,36 @@ const Admin = ({ data, email }) => {
       setSnackbarMessage('Hospital onboarded successfully!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      handleClose()
-      //  fetchHospitals()
-      // setHospitals(data);
+      
+      // Update the hospitals state immediately
+      setHospitals(prevHospitals => [...prevHospitals, { ...selectedHospital, srNo: prevHospitals.length + 1 }]);
+      
+      handleClose();
     } catch (error) {
       console.log(error);
-      // setHospitals(initialHospitals); // Uncomment if you want to reset on error
+      setSnackbarMessage('An error occurred while saving.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     } finally {
-      setLoading(false); // Ensure loading state is reset
+      setLoading(false);
     }
   };
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSelectedHospital({
-      ...selectedHospital,
+    setSelectedHospital(prev => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const validateFields = () => {
-    if (isNew) {
-      return selectedHospital?.hospitalName && selectedHospital?.hospitalDesc && selectedHospital?.adminName && selectedHospital?.adminEmail
-
-    }
-    else {
-      return selectedHospital?.hospitalName && selectedHospital?.hospitalDesc && selectedHospital?.adminName && selectedHospital?.adminEmail && selectedHospital?.tenantId;
-
-    }
+    const requiredFields = ['hospitalName', 'hospitalDesc', 'adminName', 'adminEmail'];
+    if (!isNew) requiredFields.push('tenantId');
+    return requiredFields.every(field => selectedHospital[field]);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!validateFields()) {
       setSnackbarMessage('Please fill out all fields before saving.');
       setSnackbarSeverity('error');
@@ -102,42 +107,42 @@ const Admin = ({ data, email }) => {
       return;
     }
 
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       if (isNew) {
-        createHospitals(selectedHospital)
-        setHospitals([...hospitals, { ...selectedHospital, status: 'pending' }]);
-        setSnackbarMessage('Hospital onboarded successfully!');
-        setSnackbarSeverity('success');
+        await createHospitals(selectedHospital);
       } else {
-        const updatedHospitals = hospitals.map(hospital =>
-          hospital.hospitalName === initialValues.hospitalName ? selectedHospital : hospital
+        // Handle updating existing hospital here
+        setHospitals(prevHospitals => 
+          prevHospitals.map(hospital =>
+            hospital.hospitalName === initialValues.hospitalName ? selectedHospital : hospital
+          )
         );
-        setHospitals(updatedHospitals);
+        setSnackbarMessage('Hospital updated successfully!');
+        setSnackbarSeverity('success');
       }
-
 
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarMessage('An error occurred while saving.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
+      console.error('error', error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
       handleClose();
     }
-
   };
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
-
   const handleDiscard = () => {
-    setSelectedHospital(initialValues); // Reset to initial values
+    setSelectedHospital(initialValues);
     setEditMode(false);
+    setOpen(false);
   };
 
 
@@ -159,7 +164,7 @@ const Admin = ({ data, email }) => {
           component="h1"
           className="font-medium text-[23px] bg-gradient-to-r from-[#002856] to-[#385390] py-4 bg-clip-text text-transparent font-roboto"
         >
-          Hospitals ({data?.length})
+          Hospitals ({hospitals?.length})
         </Typography>
 
 
@@ -175,13 +180,14 @@ const Admin = ({ data, email }) => {
             <TableRow>
               <TableCell><strong>S.N</strong></TableCell>
               <TableCell align="center" > <strong>Hospital Name</strong></TableCell>
+              <TableCell align="center" > <strong>Hospital Desc</strong></TableCell>
               <TableCell align="center"><strong>Status</strong></TableCell>
               <TableCell align="right"><strong>Action</strong></TableCell>
 
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((row) => (
+            {hospitals?.map((row) => (
               <TableRow
                 key={row.srNo}
               >
@@ -191,7 +197,10 @@ const Admin = ({ data, email }) => {
                   {row.hospitalName}
                 </TableCell>
                 <TableCell component="th" align="center" scope="row">
-                  <Chip label="Onboard Complete" color="success" variant="outlined" />
+                  {row.hospitalDesc}
+                </TableCell>
+                <TableCell component="th" align="center" scope="row">
+                  <Chip label={row.status || "Onboard Complete"} color="success" variant="outlined" />
 
                 </TableCell>
                 <TableCell component="th" align="right" scope="row" width={"200px"}>
@@ -217,15 +226,16 @@ const Admin = ({ data, email }) => {
         <DialogTitle id="dialog-title">
           <Typography variant="h6">{isNew ? 'Add New Hospital' : 'Hospital Details'}</Typography>
           {!isNew && (
-            <IconButton
-              edge="end"
-              color="inherit"
-              onClick={handleEdit}
-              aria-label="edit"
-              style={{ position: 'absolute', right: 70, top: 8 }}
-            >
-              <EditIcon />
-            </IconButton>
+            // <IconButton
+            //   edge="end"
+            //   color="inherit"
+            //   onClick={handleEdit}
+            //   aria-label="edit"
+            //   style={{ position: 'absolute', right: 70, top: 8 }}
+            // >
+            //   <EditIcon />
+            // </IconButton>
+            <></>
           )}
           <IconButton
             edge="end"

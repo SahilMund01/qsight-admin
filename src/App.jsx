@@ -61,6 +61,7 @@ function App() {
 
   const fetchData = async () => {
     const adminData = await fetchAndProcessAdminData();
+    // const filteredAdminData = adminData.filter((ele) => ele.adminEmail === user.email)
     setData((prev) => {
       return {
         ...prev,
@@ -137,7 +138,7 @@ function App() {
         <Header handleClose={handleClose} handleMenu={handleMenu} anchorEl={anchorEl} userRole={user.role}/>
 
         {
-          user?.role === "admin" && data?.admin && <Admin data={data?.admin} email={user.email}/> 
+          user?.role === "admin" && data?.admin && <Admin data={data?.admin} email={user.email} onSetUser = {setUser}/> 
         }
        
         </>

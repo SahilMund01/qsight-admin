@@ -1,23 +1,20 @@
+import axios from "axios";
 
-const adminData = [
-  { hospitalName: "General Hospital" },
-  { hospitalName: "City Hospital" },
-  { hospitalName: "County Hospital" },
-];
 
-const tenatData = {
-    hospitalName: "General Hospital",
-    tenantId: "tenant-123",
-    adminName: "John Doe",
-    adminId: "admin-456",
-  };
+const fetchAdminData = async () => {
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve({ data: adminData });
+  //   }, 1000); 
+  // });
 
-const fetchAdminData = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ data: adminData });
-    }, 1000); 
-  });
+  try {
+    const data = await axios.get("https://dns-ssl.online/api/tenant/all");
+  console.log(data);
+  return data;
+  } catch (error) {
+    console.error('ERROR', error)
+  }
 };
 const fetchUserData = () => {
   return new Promise((resolve) => {
