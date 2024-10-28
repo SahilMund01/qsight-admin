@@ -178,10 +178,10 @@ const Admin = ({ data, email , onSetUser, isAdmin}) => {
         <Table aria-label="simple table" >
           <TableHead>
             <TableRow>
-              <TableCell><strong>S.N</strong></TableCell>
-              <TableCell align="center" > <strong>Hospital Name</strong></TableCell>
-              <TableCell align="center" > <strong>Hospital Desc</strong></TableCell>
-              <TableCell align="center"><strong>Status</strong></TableCell>
+              <TableCell><strong>Tenant Id</strong></TableCell>
+              <TableCell align="center" > <strong>Tenant Name</strong></TableCell>
+              <TableCell align="center" > <strong>Tenant Desc</strong></TableCell>
+              <TableCell align="center"><strong>Onboarding Status</strong></TableCell>
               <TableCell align="right"><strong>Action</strong></TableCell>
 
             </TableRow>
@@ -191,16 +191,16 @@ const Admin = ({ data, email , onSetUser, isAdmin}) => {
               <TableRow
                 key={row.srNo}
               >
-                <TableCell component="th">{row.srNo}</TableCell>
+                <TableCell component="th">{row.tenant_id}</TableCell>
 
                 <TableCell component="th" align="center" scope="row">
-                  {row.hospitalName}
+                  {row.tenant_name}
                 </TableCell>
                 <TableCell component="th" align="center" scope="row">
-                  {row.hospitalDesc}
+                  {row.tenant_description}
                 </TableCell>
                 <TableCell component="th" align="center" scope="row">
-                  <Chip label={row.status || "Onboard Complete"} color="success" variant="outlined" />
+                  <Chip label={row.onboarding_status || "Onboard Complete"} color="success" variant="outlined" />
 
                 </TableCell>
                 <TableCell component="th" align="right" scope="row" width={"200px"}>

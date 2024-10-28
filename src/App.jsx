@@ -142,7 +142,7 @@ function App() {
          
         <Header handleClose={handleClose} handleMenu={handleMenu} anchorEl={anchorEl} userRole={user.role}/>
 
-       {
+       {/* {
         !isAdmin &&  
         <div className='w-[90%] m-auto mt-6'>
         <div className="bg-blue-100 border border-blue-300 rounded-md p-4 my-4">
@@ -151,11 +151,11 @@ function App() {
         </Typography>
       </div>
       </div>
-       }
+       } */}
 
         {
-          isAdmin && user?.role === "admin" && data?.admin 
-          && <Admin data={data?.admin} email={user.email} onSetUser = {setUser} role={isAdmin}/> 
+          // isAdmin && user?.role === "admin" && data?.admin  &&
+           <Admin data={data?.admin} email={user.email} onSetUser = {setUser} role={isAdmin}/> 
         }
        
         </>

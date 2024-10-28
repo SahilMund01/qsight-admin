@@ -16,13 +16,13 @@ const fetchAdminData = async () => {
     console.error('ERROR', error)
   }
 };
-const fetchUserData = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ data: tenatData });
-    }, 1000); 
-  });
-};
+// const fetchUserData = () => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve({ data: tenatData });
+//     }, 1000); 
+//   });
+// };
 
 // Function to generate serial numbers for Screen 2 data
 const addSerialNumbers = (data) => {
@@ -43,12 +43,12 @@ export const fetchAndProcessAdminData = async () => {
   }
 };
 
-export const fetchAndProcessUserData = async () => {
-    try {
-      const response = await fetchUserData();
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching and processing Screen 2 data:", error);
-    }
-  };
+// export const fetchAndProcessUserData = async () => {
+//     try {
+//       const response = await fetchUserData();
+//       return response.data;
+//     } catch (error) {
+//       console.error("Error fetching and processing Screen 2 data:", error);
+//     }
+//   };
 
