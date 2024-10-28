@@ -7,7 +7,7 @@ import { fetchAndProcessAdminData } from './api';
 const Admin = ({ data, email , onSetUser, isAdmin}) => {
 
   // const BASE_URL = "https://9848-139-167-129-22.ngrok-free.app";
-  const BASE_URL = "https://dns-ssl.online";
+  const BASE_URL = "https://proj-qsight.techo.camp";
 
   const [open, setOpen] = useState(false);
   const [hospitals, setHospitals] = useState([]);
