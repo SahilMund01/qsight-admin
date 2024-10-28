@@ -9,7 +9,7 @@ const fetchAdminData = async () => {
   // });
 
   try {
-    const data = await axios.get("https://dns-ssl.online/api/tenant/all");
+    const data = await axios.get("https://proj-qsight.techo.camp/api/tenant/all");
   console.log(data);
   return data;
   } catch (error) {
